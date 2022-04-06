@@ -142,5 +142,58 @@ void tui_com_chart_test(void)
 <img src="https://gitee.com/tuisys/image/raw/main/chart.gif">
 </p>
 
+## 翻页动画（volti.c）
+设置翻页动画组件的坐标位置和宽高，设置对应的上下图片路径，通过`tui_com_volti_set_attri()`函数显示对应数字的翻页效果，测试代码如下：
+``` c
+void tui_com_volti_test(void)
+{
+	tui_obj_t * obj;
+	tui_com_volti_attri_t attri = { 0 };
+	obj = tui_com_volti_create(tui_layer_top());
+
+	/* 通用属性 */
+	attri.obj.pt.x = 200;
+	attri.obj.pt.y = 100;
+	attri.obj.size.width = 200;
+	attri.obj.size.height = 260;
+
+	attri.up_num_img_pt.x = 0;
+	attri.up_num_img_pt.y = 0;
+	strcpy(attri.up_num_img_path[0], "V:\\image\\0u.png");
+	strcpy(attri.up_num_img_path[1], "V:\\image\\1u.png");
+	strcpy(attri.up_num_img_path[2], "V:\\image\\2u.png");
+	strcpy(attri.up_num_img_path[3], "V:\\image\\3u.png");
+	strcpy(attri.up_num_img_path[4], "V:\\image\\4u.png");
+	strcpy(attri.up_num_img_path[5], "V:\\image\\5u.png");
+	strcpy(attri.up_num_img_path[6], "V:\\image\\6u.png");
+	strcpy(attri.up_num_img_path[7], "V:\\image\\7u.png");
+	strcpy(attri.up_num_img_path[8], "V:\\image\\8u.png");
+	strcpy(attri.up_num_img_path[9], "V:\\image\\9u.png");
+
+	attri.down_num_img_pt.x = 0;
+	attri.down_num_img_pt.y = 130;
+	strcpy(attri.down_num_img_path[0], "V:\\image\\0d.png");
+	strcpy(attri.down_num_img_path[1], "V:\\image\\1d.png");
+	strcpy(attri.down_num_img_path[2], "V:\\image\\2d.png");
+	strcpy(attri.down_num_img_path[3], "V:\\image\\3d.png");
+	strcpy(attri.down_num_img_path[4], "V:\\image\\4d.png");
+	strcpy(attri.down_num_img_path[5], "V:\\image\\5d.png");
+	strcpy(attri.down_num_img_path[6], "V:\\image\\6d.png");
+	strcpy(attri.down_num_img_path[7], "V:\\image\\7d.png");
+	strcpy(attri.down_num_img_path[8], "V:\\image\\8d.png");
+	strcpy(attri.down_num_img_path[9], "V:\\image\\9d.png");
+
+	attri.cur_num = 2;
+
+	tui_com_volti_set_attri(obj, &attri);
+
+	tui_com_volti_set_num(obj, 3);
+}
+```
+效果如图：
+<p align="center">
+<img src="https://gitee.com/tuisys/image/raw/main/volti.gif">
+</p>
+
 ## 创建组件模板（template.c）
 该文件没有实际功能，主要是提供给开发者扩展自己的组件，按照这个模板文件书写代码，规范格式，避免遗漏代码。

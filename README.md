@@ -1,7 +1,7 @@
-<h1 align="center"> TUI组件的实现和实用 </h1>
+<h1 align="center"> TUI组件的实现和使用 </h1>
 
 ## 组件描述
-TUI组件是通过基础控件实现复杂界面功能模块，用户也可以自定义组件模块（参考template.c），或者根据自己需求修改系统提供的组件。组件里面的json解析函数，是方便将来UIStudio工具对组件的扩展。用户在使用的时候需要包含头文件`tui_component.h`和`tjson.h`，结合`TUISYS/tui_project`仓库里面的tui库文件，在tui内核初始化完成后调用。
+TUI组件是通过基础控件实现复杂界面功能模块，用户也可以自定义组件模块（参考template.c），或者根据自己需求修改系统提供的组件。组件里面的json解析函数，是方便将来UIStudio工具对组件的扩展。用户在使用的时候需要包含头文件`tui_component.h`和`tjson.h`，然后将文件夹📁component里面的`.C`文件参加编译，最后结合`TUISYS/tui_project`仓库里面的tui库文件，在tui内核初始化完成后调用。
 
 ## 日历（calendar.c）
 只需要设置日历组件的坐标位置和宽高，测试代码如下：
@@ -108,7 +108,7 @@ void tui_com_dial_test(void)
 </p>
 
 ## 折线表（chart.c）
-设置折线表组件的坐标位置和宽高，设置折线的点个数，通过`tui_com_chart_set_point()`函数设置点的位置，表的底部值是`0`，测试代码如下：
+设置折线表组件的坐标位置和宽高，设置折线的点个数，通过`tui_com_chart_set_point()`函数设置对应索引点的位置，表的底部值是`0`，测试代码如下：
 ``` c
 void tui_com_chart_test(void)
 {

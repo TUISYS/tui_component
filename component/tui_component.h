@@ -31,16 +31,16 @@ static void * tui_com_get_func(uint32_t obj_id, tui_map_cb_t map_cb[])
 }
 
 /*------------------------
- *  dial¿Ì¶È±íÅÌ
+ *  dialåˆ»åº¦è¡¨ç›˜
  *------------------------*/
 typedef void(*tui_com_dial_cb_t)(tui_obj_t *obj, tui_event_e event, int32_t value);
 typedef struct {
-	/* Í¨ÓÃÊôĞÔ */
+	/* é€šç”¨å±æ€§ */
 	tui_object_attri_t obj;
 	tui_obj_t *bg_img_obj;
 	tui_obj_t *point_img_obj;
 	tui_obj_t *txt_obj;
-	/* ¿Ì¶È±íÅÌ»Øµ÷º¯Êı£¬·µ»Øµ±Ç°Öµ */
+	/* åˆ»åº¦è¡¨ç›˜å›è°ƒå‡½æ•°ï¼Œè¿”å›å½“å‰å€¼ */
 	tui_com_dial_cb_t cb;
 
 	char *bg_img_path;
@@ -61,18 +61,18 @@ int tui_com_dial_get_attri(tui_obj_t *com_dial, tui_com_dial_attri_t *attri);
 void tui_com_dial_set_point_angle(tui_obj_t *com_dial, int value/* 0~100 */);
 
 /*------------------------
- *  clockÊ±ÖÓ±íÅÌ
+ *  clockæ—¶é’Ÿè¡¨ç›˜
  *------------------------*/
 typedef void(*tui_com_clock_cb_t)(tui_obj_t *obj, tui_event_e event, int32_t sec);
 typedef struct {
-	/* Í¨ÓÃÊôĞÔ */
+	/* é€šç”¨å±æ€§ */
 	tui_object_attri_t obj;
 	tui_obj_t *bg_img_obj;
 	tui_obj_t *point_h_img_obj;
 	tui_obj_t *point_m_img_obj;
 	tui_obj_t *point_s_img_obj;
 	tui_timer_t *clock_timer;
-	/* ¿Ì¶È±íÅÌ»Øµ÷º¯Êı£¬·µ»Øµ±Ç°Öµ */
+	/* åˆ»åº¦è¡¨ç›˜å›è°ƒå‡½æ•°ï¼Œè¿”å›å½“å‰å€¼ */
 	tui_com_clock_cb_t cb;
 
 	char *bg_img_path;
@@ -96,17 +96,17 @@ int tui_com_clock_set_attri(tui_obj_t *com_clock, tui_com_clock_attri_t *attri);
 int tui_com_clock_get_attri(tui_obj_t *com_clock, tui_com_clock_attri_t *attri);
 
 /*------------------------
- *  chartÍ¼±êÇúÏß
+ *  chartå›¾æ ‡æ›²çº¿
  *------------------------*/
 typedef void(*tui_com_chart_cb_t)(tui_obj_t *obj, tui_event_e event, int32_t value);
 typedef struct {
-	/* Í¨ÓÃÊôĞÔ */
+	/* é€šç”¨å±æ€§ */
 	tui_object_attri_t obj;
 	tui_obj_t *bg_chart_obj;
 	tui_obj_t *chart_line_obj;
 	tui_obj_t **chart_cursor_obj;
 	tui_point_t *point_array;
-	/* ¿Ì¶È±íÅÌ»Øµ÷º¯Êı£¬·µ»Øµ±Ç°Öµ */
+	/* åˆ»åº¦è¡¨ç›˜å›è°ƒå‡½æ•°ï¼Œè¿”å›å½“å‰å€¼ */
 	tui_com_chart_cb_t cb;
 	
 	uint16_t point_num;
@@ -118,11 +118,11 @@ int tui_com_chart_get_attri(tui_obj_t *com_chart, tui_com_chart_attri_t *attri);
 void tui_com_chart_set_point(tui_obj_t *com_chart, int32_t index, int32_t value);
 
 /*------------------------
- *  calendarÈÕÀú
+ *  calendaræ—¥å†
  *------------------------*/
 typedef void(*tui_com_calendar_cb_t)(tui_obj_t *obj, tui_event_e event, int32_t value);
 typedef struct {
-	/* Í¨ÓÃÊôĞÔ */
+	/* é€šç”¨å±æ€§ */
 	tui_object_attri_t obj;
 	tui_obj_t *pre_month_bnt;
 	tui_obj_t *pre_month_txt;
@@ -134,7 +134,7 @@ typedef struct {
 	tui_obj_t *day_text_obj[42]; /* [6][7] */
 	tui_time_t set_time;
 	tui_timer_t *ref_timer;
-	/* ¿Ì¶È±íÅÌ»Øµ÷º¯Êı£¬·µ»Øµ±Ç°Öµ */
+	/* åˆ»åº¦è¡¨ç›˜å›è°ƒå‡½æ•°ï¼Œè¿”å›å½“å‰å€¼ */
 	tui_com_calendar_cb_t cb;
 
 	char week_str[7][10];
@@ -147,13 +147,39 @@ int tui_com_calendar_get_attri(tui_obj_t *com_calendar, tui_com_calendar_attri_t
 void tui_com_calendar_show_year_month(tui_obj_t *com_calendar, int year, int month);
 
 /*------------------------
- *  templateÄ£°å×é¼ş
+*  voltiç¿»é¡µåŠ¨ç”»
+*------------------------*/
+typedef void(*tui_com_volti_cb_t)(tui_obj_t *obj, tui_event_e event, int32_t value);
+typedef struct {
+	/* é€šç”¨å±æ€§ */
+	tui_object_attri_t obj;
+	tui_obj_t *img_old_up;
+	tui_obj_t *img_old_down;
+	tui_obj_t *img_new_up;
+	tui_obj_t *img_new_down;
+	tui_coord_t height_d;
+	/* åˆ»åº¦è¡¨ç›˜å›è°ƒå‡½æ•°ï¼Œè¿”å›å½“å‰å€¼ */
+	tui_com_volti_cb_t cb;
+	
+	uint8_t cur_num;
+	char up_num_img_path[10][32];
+	tui_point_t up_num_img_pt;
+	char down_num_img_path[10][32];
+	tui_point_t down_num_img_pt;
+} tui_com_volti_attri_t;
+tui_obj_t * tui_com_volti_create(tui_obj_t * par);
+int tui_com_volti_set_attri(tui_obj_t *com_volti, tui_com_volti_attri_t *attri);
+int tui_com_volti_get_attri(tui_obj_t *com_volti, tui_com_volti_attri_t *attri);
+void tui_com_volti_set_num(tui_obj_t *com_volti, uint8_t num);
+
+/*------------------------
+ *  templateæ¨¡æ¿ç»„ä»¶
  *------------------------*/
 typedef void(*tui_com_template_cb_t)(tui_obj_t *obj, tui_event_e event, int32_t value);
 typedef struct {
-	/* Í¨ÓÃÊôĞÔ */
+	/* é€šç”¨å±æ€§ */
 	tui_object_attri_t obj;
-	/* ¿Ì¶È±íÅÌ»Øµ÷º¯Êı£¬·µ»Øµ±Ç°Öµ */
+	/* åˆ»åº¦è¡¨ç›˜å›è°ƒå‡½æ•°ï¼Œè¿”å›å½“å‰å€¼ */
 	tui_com_template_cb_t cb;
 } tui_com_template_attri_t;
 tui_obj_t * tui_com_template_create(tui_obj_t * par);

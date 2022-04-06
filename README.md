@@ -1,10 +1,10 @@
 <h1 align="center"> TUI组件的实现和实用 </h1>
 
-## 描述
-TUI组件是通过基础控件实现复杂界面功能模块，用户也可以自定义组件模块（参考template.c），或者根据自己需求修改系统提供的组件。组件里面的json解析，是方便将来UIStudio工具对组件的扩展。用户在实用的时候需要包含头文件`tui_component.h`和`tjson.h`，结合`TUISYS/tui_project`仓库里面的tui库文件，在tui内核初始化完成后调用。
+## 组件描述
+TUI组件是通过基础控件实现复杂界面功能模块，用户也可以自定义组件模块（参考template.c），或者根据自己需求修改系统提供的组件。组件里面的json解析函数，是方便将来UIStudio工具对组件的扩展。用户在使用的时候需要包含头文件`tui_component.h`和`tjson.h`，结合`TUISYS/tui_project`仓库里面的tui库文件，在tui内核初始化完成后调用。
 
 ## 日历（calendar.c）
-测试代码如下：
+只需要设置日历组件的坐标位置和宽高，测试代码如下：
 ``` c
 void tui_com_calendar_test(void)
 {
@@ -21,8 +21,13 @@ void tui_com_calendar_test(void)
 	tui_com_calendar_set_attri(obj, &attri);
 }
 ```
+实际效果如图：
+<p align="center">
+<img src="https://gitee.com/tuisys/image/raw/main/calendar.gif">
+</p>
+
 ## 时钟（clock.c）
-测试代码如下：
+设置时钟组件的坐标位置和宽高，将`.png`图片资源通过UIStudio工具导入打包，重点设置图片对应的路径和旋转图片的旋转坐标，测试代码如下：
 ``` c
 void tui_com_clock_test(void)
 {
@@ -60,8 +65,13 @@ void tui_com_clock_test(void)
 	tui_com_clock_set_attri(obj, &attri);
 }
 ```
-## 仪盘（dial.c）
-测试代码如下：
+效果如图：
+<p align="center">
+<img src="https://gitee.com/tuisys/image/raw/main/clock.gif">
+</p>
+
+## 仪表盘（dial.c）
+设置仪表盘组件的坐标位置和宽高，将`.png`图片资源通过UIStudio工具导入打包，重点设置图片对应的路径和旋转图片的旋转坐标，测试代码如下：
 ``` c
 void tui_com_dial_test(void)
 {
@@ -92,8 +102,13 @@ void tui_com_dial_test(void)
 	tui_com_dial_set_point_angle(obj, 100);
 }
 ```
+效果如图：
+<p align="center">
+<img src="https://gitee.com/tuisys/image/raw/main/dial.gif">
+</p>
+
 ## 折线表（chart.c）
-测试代码如下：
+设置折线表组件的坐标位置和宽高，设置折线的点个数，通过`tui_com_chart_set_point()`函数设置点的位置，表的底部值是`0`，测试代码如下：
 ``` c
 void tui_com_chart_test(void)
 {
@@ -122,5 +137,10 @@ void tui_com_chart_test(void)
 	tui_com_chart_set_point(obj, 9, 250);
 }
 ```
+效果如图：
+<p align="center">
+<img src="https://gitee.com/tuisys/image/raw/main/chart.gif">
+</p>
+
 ## 创建组件模板（template.c）
 该文件没有实际功能，主要是提供给开发者扩展自己的组件，按照这个模板文件书写代码，规范格式，避免遗漏代码。

@@ -4,7 +4,7 @@
 TUI组件是通过基础控件实现复杂界面功能模块，用户也可以自定义组件模块（参考template.c），或者根据自己需求修改系统提供的组件。组件里面的json解析函数，是方便将来UIStudio工具对组件的扩展。用户在使用的时候需要包含头文件`tui_component.h`和`tjson.h`，然后将文件夹📁component里面的`.C`文件参加编译，最后结合`TUISYS/tui_project`仓库里面的tui库文件，在tui内核初始化完成后调用。
 
 ## 日历（calendar.c）
-只需要设置日历组件的坐标位置和宽高，测试代码如下：
+只需要设置日历组件的坐标位置和宽高，其中calendar.c里面有中国农历的计算公式，目前没有使用，方便后面扩展。测试代码如下：
 ``` c
 void tui_com_calendar_test(void)
 {

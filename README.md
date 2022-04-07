@@ -148,7 +148,7 @@ void tui_com_chart_test(void)
 void tui_com_volti_test(void)
 {
 	tui_obj_t * obj;
-	tui_com_volti_attri_t attri = { 0 };
+	tui_com_volti_attri_t attri = { 0 };//注意先清空结构体，避免随机值
 	obj = tui_com_volti_create(tui_layer_top());
 
 	/* 通用属性 */
@@ -193,6 +193,33 @@ void tui_com_volti_test(void)
 效果如图：
 <p align="center">
 <img src="https://gitee.com/tuisys/image/raw/main/volti.gif">
+</p>
+
+## 消息框（msgbox.c）
+只需要设置消息框组件的宽高，显示屏幕居中，其中消息框组件支持三种消息提示`YES,NO`按钮、`OK`按钮和5秒自动消失提示框。测试代码如下：
+``` c
+void tui_com_msgbox_test(void)
+{
+	tui_obj_t * obj;
+	tui_com_msgbox_attri_t attri = { 0 };//注意先清空结构体，避免随机值
+	obj = tui_com_msgbox_create(tui_layer_top());
+
+	/* 通用属性 */
+	attri.obj.size.width = 300;
+	attri.obj.size.height = 200;
+
+	attri.msg_str = "test msg box test !\nnew line test !";
+	attri.btn_num = 0;//2、1、0分别对应不同消息框
+	attri.no_str = "NO";
+	attri.yes_str = "YES";
+	attri.ok_str = "OK";
+
+	tui_com_msgbox_set_attri(obj, &attri);
+}
+```
+实际效果如图：
+<p align="center">
+<img src="https://gitee.com/tuisys/image/raw/main/msgbox.png">
 </p>
 
 ## 创建组件模板（template.c）

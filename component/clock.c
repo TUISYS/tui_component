@@ -85,7 +85,7 @@ int tui_com_clock_set_attri(tui_obj_t *com_clock, tui_com_clock_attri_t *attri)
 {
 	tui_time_t cur_t = { 0 };
 	tui_com_clock_attri_t *attri_me;
-	tui_image_attri_t attri_pt = { 0 };
+	tui_image_attri_t attri_pt = { 0 };//注意先清空结构体，避免随机值
 
 	if (com_clock == NULL) {
 		printf("tui_com_clock_set_attri L%d: faile\n", __LINE__);
@@ -186,7 +186,7 @@ int tui_com_clock_get_attri(tui_obj_t *com_clock, tui_com_clock_attri_t *attri)
 tui_obj_t * tui_com_clock_create_json(tui_obj_t * par, tJSON* attri_json, tui_map_cb_t map_cb[])
 {
 	tui_obj_t *ret;
-	tui_com_clock_attri_t attri = { 0 };
+	tui_com_clock_attri_t attri = { 0 };//注意先清空结构体，避免随机值
 	tJSON *item, *array;
 	int32_t num, i;
 
@@ -291,7 +291,7 @@ tui_obj_t * tui_com_clock_create_json(tui_obj_t * par, tJSON* attri_json, tui_ma
 		}
 	}
 
-	attri.cb = tui_com_get_func(attri.obj.obj_id, map_cb);
+	attri.cb = (tui_com_clock_cb_t)tui_com_get_func(attri.obj.obj_id, map_cb);
 
 	tui_com_clock_set_attri(ret, &attri);
 

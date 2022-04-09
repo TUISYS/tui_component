@@ -88,7 +88,7 @@ int tui_com_template_get_attri(tui_obj_t *com_template, tui_com_template_attri_t
 tui_obj_t * tui_com_template_create_json(tui_obj_t * par, tJSON* attri_json, tui_map_cb_t map_cb[])
 {
 	tui_obj_t *ret;
-	tui_com_template_attri_t attri = { 0 };
+	tui_com_template_attri_t attri = { 0 };//注意先清空结构体，避免随机值
 	tJSON *item, *array;
 	int32_t num, i;
 
@@ -145,7 +145,7 @@ tui_obj_t * tui_com_template_create_json(tui_obj_t * par, tJSON* attri_json, tui
 		}
 	}
 
-	attri.cb = tui_com_get_func(attri.obj.obj_id, map_cb);
+	attri.cb = (tui_com_template_cb_t)tui_com_get_func(attri.obj.obj_id, map_cb);
 
 	tui_com_template_set_attri(ret, &attri);
 

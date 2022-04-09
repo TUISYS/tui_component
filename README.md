@@ -202,19 +202,21 @@ void tui_com_msgbox_test(void)
 {
 	tui_obj_t * obj;
 	tui_com_msgbox_attri_t attri = { 0 };//注意先清空结构体，避免随机值
-	obj = tui_com_msgbox_create(tui_layer_top());
+	obj = tui_com_msgbox_create(tui_layer_normal());
 
 	/* 通用属性 */
 	attri.obj.size.width = 300;
 	attri.obj.size.height = 200;
 
 	attri.msg_str = "test msg box test !\nnew line test !";
-	attri.btn_num = 0;//2、1、0分别对应不同消息框
+	attri.btn_num = 2;//2、1、0分别对应不要消息框
 	attri.no_str = "NO";
 	attri.yes_str = "YES";
 	attri.ok_str = "OK";
 
 	tui_com_msgbox_set_attri(obj, &attri);
+
+	tui_com_msgbox_show_or_hide(obj, 1);
 }
 ```
 实际效果如图：

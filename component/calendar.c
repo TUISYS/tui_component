@@ -1,6 +1,14 @@
 #include "tui.h"
 
-#define TUI_COM_CALENDAR_WEEK_STARTS_MONDAY
+#define TUI_COM_CALENDAR_FIRST_ROW_H		70
+#define TUI_COM_CALENDAR_SECOND_ROW_H		60
+
+#define TUI_COM_CALENDAR_BTN_TXT_FNT_SIZE	32
+#define TUI_COM_CALENDAR_YEAR_TXT_FNT_SIZE	32
+#define TUI_COM_CALENDAR_WEEK_TXT_FNT_SIZE	32
+#define TUI_COM_CALENDAR_DAY_TXT_FNT_SIZE	32
+
+//#define TUI_COM_CALENDAR_WEEK_STARTS_MONDAY
 
 #ifdef TUI_COM_CALENDAR_WEEK_STARTS_MONDAY
 static const char * day_name[7] = { "Mo", "Tu", "We", "Th", "Fr", "Sa", "Su" };
@@ -359,14 +367,12 @@ int tui_com_calendar_set_attri(tui_obj_t *com_calendar, tui_com_calendar_attri_t
 {
 	char temp_str[20];
 	tui_time_t cur_t = { 0 };
-	tui_label_attri_t attri_txt = { 0 };
-	tui_button_attri_t attri_btn = { 0 };
-	tui_line_attri_t attri_line = { 0 };
+	tui_label_attri_t attri_txt = { 0 };//注意先清空结构体，避免随机值
+	tui_button_attri_t attri_btn = { 0 };//注意先清空结构体，避免随机值
+	tui_line_attri_t attri_line = { 0 };//注意先清空结构体，避免随机值
 	tui_com_calendar_attri_t *attri_me;
 	int i = 0, j = 0;
 	int unit_w, unit_h;
-
-#define TUI_COM_CALENDAR_FIRST_LINE_H	60
 
 	if (com_calendar == NULL) {
 		printf("tui_com_calendar_set_attri L%d: faile\n", __LINE__);
@@ -390,15 +396,15 @@ int tui_com_calendar_set_attri(tui_obj_t *com_calendar, tui_com_calendar_attri_t
 	sprintf(temp_str, "%d-%02d-%02d", cur_t.year, cur_t.mon + 1, cur_t.mday);
 
 	unit_w = attri_me->obj.size.width / 7;
-	unit_h = (attri_me->obj.size.height - TUI_COM_CALENDAR_FIRST_LINE_H) / 7;
+	unit_h = (attri_me->obj.size.height - TUI_COM_CALENDAR_FIRST_ROW_H - TUI_COM_CALENDAR_SECOND_ROW_H) / 7;
 
 	attri_me->year_text_obj = tui_label_create(com_calendar);
 	attri_txt.obj.pt.x = 0;
 	attri_txt.obj.pt.y = 0;
 	attri_txt.obj.size.width = attri_me->obj.size.width;
-	attri_txt.obj.size.height = TUI_COM_CALENDAR_FIRST_LINE_H;
+	attri_txt.obj.size.height = TUI_COM_CALENDAR_FIRST_ROW_H;
 	attri_txt.txt = temp_str;
-	attri_txt.fnt_size = 32;
+	attri_txt.fnt_size = TUI_COM_CALENDAR_YEAR_TXT_FNT_SIZE;
 	attri_txt.fnt_color = 0xFF000000;
 	attri_txt.mode = TUI_LABEL_LONG_DOT;
 	attri_txt.align = TUI_LABEL_ALIGN_CENTER;
@@ -408,14 +414,14 @@ int tui_com_calendar_set_attri(tui_obj_t *com_calendar, tui_com_calendar_attri_t
 	for (i = 0; i < 7; i++) {
 		attri_me->week_text_obj[i] = tui_label_create(com_calendar);
 		attri_txt.obj.pt.x = i * unit_w;
-		attri_txt.obj.pt.y = TUI_COM_CALENDAR_FIRST_LINE_H;
+		attri_txt.obj.pt.y = TUI_COM_CALENDAR_FIRST_ROW_H;
 		attri_txt.obj.size.width = unit_w;
-		attri_txt.obj.size.height = unit_h;
+		attri_txt.obj.size.height = TUI_COM_CALENDAR_SECOND_ROW_H;
 		if (strlen(attri_me->week_str[i]) == 0)
 			attri_txt.txt = (char *)day_name[i];
 		else
 			attri_txt.txt = (char *)attri_me->week_str[i];
-		attri_txt.fnt_size = 32;
+		attri_txt.fnt_size = TUI_COM_CALENDAR_WEEK_TXT_FNT_SIZE;
 		attri_txt.fnt_color = 0xFF000000;
 		attri_txt.mode = TUI_LABEL_LONG_DOT;
 		attri_txt.align = TUI_LABEL_ALIGN_CENTER;
@@ -427,11 +433,11 @@ int tui_com_calendar_set_attri(tui_obj_t *com_calendar, tui_com_calendar_attri_t
 		for (i = 0; i < 7; i++) {
 			attri_me->day_text_obj[j * 7 + i] = tui_label_create(com_calendar);
 			attri_txt.obj.pt.x = i * unit_w;
-			attri_txt.obj.pt.y = (unit_h + TUI_COM_CALENDAR_FIRST_LINE_H) + unit_h * j;
+			attri_txt.obj.pt.y = (TUI_COM_CALENDAR_FIRST_ROW_H + TUI_COM_CALENDAR_SECOND_ROW_H) + unit_h * j;
 			attri_txt.obj.size.width = unit_w;
 			attri_txt.obj.size.height = unit_h;
 			attri_txt.txt = "**";
-			attri_txt.fnt_size = 32;
+			attri_txt.fnt_size = TUI_COM_CALENDAR_DAY_TXT_FNT_SIZE;
 			attri_txt.fnt_color = 0xFF000000;
 			attri_txt.mode = TUI_LABEL_LONG_DOT;
 			attri_txt.align = TUI_LABEL_ALIGN_CENTER;
@@ -444,7 +450,7 @@ int tui_com_calendar_set_attri(tui_obj_t *com_calendar, tui_com_calendar_attri_t
 	attri_btn.obj.pt.x = 50;
 	attri_btn.obj.pt.y = 0+5;
 	attri_btn.obj.size.width = 100;
-	attri_btn.obj.size.height = TUI_COM_CALENDAR_FIRST_LINE_H-10;
+	attri_btn.obj.size.height = TUI_COM_CALENDAR_FIRST_ROW_H - 10;
 	attri_btn.cb = tui_com_calendar_pre_button_cb_t;
 	attri_btn.border_color = 0xFF5F0000;
 	attri_btn.border_width = 1;
@@ -459,7 +465,7 @@ int tui_com_calendar_set_attri(tui_obj_t *com_calendar, tui_com_calendar_attri_t
 		attri_txt.txt = "PRE";
 	else
 		attri_txt.txt = attri_me->pre_str;
-	attri_txt.fnt_size = 32;
+	attri_txt.fnt_size = TUI_COM_CALENDAR_BTN_TXT_FNT_SIZE;
 	attri_txt.fnt_color = 0xFF000000;
 	attri_txt.mode = TUI_LABEL_LONG_DOT;
 	attri_txt.align = TUI_LABEL_ALIGN_CENTER;
@@ -470,7 +476,7 @@ int tui_com_calendar_set_attri(tui_obj_t *com_calendar, tui_com_calendar_attri_t
 	attri_btn.obj.pt.x = attri_me->obj.size.width - 50 - 100;
 	attri_btn.obj.pt.y = 0+5;
 	attri_btn.obj.size.width = 100;
-	attri_btn.obj.size.height = TUI_COM_CALENDAR_FIRST_LINE_H-10;
+	attri_btn.obj.size.height = TUI_COM_CALENDAR_FIRST_ROW_H - 10;
 	attri_btn.cb = tui_com_calendar_next_button_cb_t;
 	attri_btn.border_color = 0xFF5F0000;
 	attri_btn.border_width = 1;
@@ -485,7 +491,7 @@ int tui_com_calendar_set_attri(tui_obj_t *com_calendar, tui_com_calendar_attri_t
 		attri_txt.txt = "NEXT";
 	else
 		attri_txt.txt = attri_me->next_str;
-	attri_txt.fnt_size = 32;
+	attri_txt.fnt_size = TUI_COM_CALENDAR_BTN_TXT_FNT_SIZE;
 	attri_txt.fnt_color = 0xFF000000;
 	attri_txt.mode = TUI_LABEL_LONG_DOT;
 	attri_txt.align = TUI_LABEL_ALIGN_CENTER;
@@ -497,9 +503,9 @@ int tui_com_calendar_set_attri(tui_obj_t *com_calendar, tui_com_calendar_attri_t
 	attri_line.color = 0xFF1F1F1F;
 	attri_line.width = 1;
 	attri_line.pts[0].x = 0;
-	attri_line.pts[0].y = TUI_COM_CALENDAR_FIRST_LINE_H;
+	attri_line.pts[0].y = TUI_COM_CALENDAR_FIRST_ROW_H + TUI_COM_CALENDAR_SECOND_ROW_H - 10;
 	attri_line.pts[1].x = attri_me->obj.size.width;
-	attri_line.pts[1].y = TUI_COM_CALENDAR_FIRST_LINE_H;
+	attri_line.pts[1].y = TUI_COM_CALENDAR_FIRST_ROW_H + TUI_COM_CALENDAR_SECOND_ROW_H - 10;
 	tui_line_set_attri(attri_me->year_line_obj, &attri_line);
 	
 	tui_com_calendar_show_year_month(com_calendar, cur_t.year, cur_t.mon + 1);
@@ -588,7 +594,7 @@ void tui_com_calendar_show_year_month(tui_obj_t *com_calendar, int year, int mon
 tui_obj_t * tui_com_calendar_create_json(tui_obj_t * par, tJSON* attri_json, tui_map_cb_t map_cb[])
 {
 	tui_obj_t *ret;
-	tui_com_calendar_attri_t attri = { 0 };
+	tui_com_calendar_attri_t attri = { 0 };//注意先清空结构体，避免随机值
 	tJSON *item, *array;
 	int32_t num, i;
 
@@ -657,7 +663,7 @@ tui_obj_t * tui_com_calendar_create_json(tui_obj_t * par, tJSON* attri_json, tui
 		}
 	}
 
-	attri.cb = tui_com_get_func(attri.obj.obj_id, map_cb);
+	attri.cb = (tui_com_calendar_cb_t)tui_com_get_func(attri.obj.obj_id, map_cb);
 
 	tui_com_calendar_set_attri(ret, &attri);
 

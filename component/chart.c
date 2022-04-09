@@ -48,8 +48,8 @@ int tui_com_chart_set_attri(tui_obj_t *com_chart, tui_com_chart_attri_t *attri)
 {
 	tui_container_attri_t attri_cursor = { 0 };
 	tui_com_chart_attri_t *attri_me;
-	tui_canvas_attri_t attri_bg = { 0 };
-	tui_line_attri_t attri_line = { 0 };
+	tui_canvas_attri_t attri_bg = { 0 };//注意先清空结构体，避免随机值
+	tui_line_attri_t attri_line = { 0 };//注意先清空结构体，避免随机值
 	int bg_unit_w, i, hor_num, ver_num;
 	tui_point_t bg_points[2];
 
@@ -179,7 +179,7 @@ void tui_com_chart_set_point(tui_obj_t *com_chart, int32_t index, int32_t value)
 	attri_me->point_array[index].x = w * index;
 	attri_me->point_array[index].y = attri_bg.obj.size.height - value;
 
-	tui_line_set_some_points_line(attri_me->chart_line_obj, attri_me->point_array, attri_me->point_num, 0);
+	tui_line_set_some_points_line(attri_me->chart_line_obj, attri_me->point_array, attri_me->point_num, attri_me->is_bezier);
 
 	tui_obj_set_x(attri_me->chart_cursor_obj[index], attri_me->point_array[index].x - 5);
 	tui_obj_set_y(attri_me->chart_cursor_obj[index], attri_me->point_array[index].y - 5);
@@ -188,7 +188,7 @@ void tui_com_chart_set_point(tui_obj_t *com_chart, int32_t index, int32_t value)
 tui_obj_t * tui_com_chart_create_json(tui_obj_t * par, tJSON* attri_json, tui_map_cb_t map_cb[])
 {
 	tui_obj_t *ret;
-	tui_com_chart_attri_t attri = { 0 };
+	tui_com_chart_attri_t attri = { 0 };//注意先清空结构体，避免随机值
 	tJSON *item, *array;
 	int32_t num, i;
 
@@ -231,6 +231,8 @@ tui_obj_t * tui_com_chart_create_json(tui_obj_t * par, tJSON* attri_json, tui_ma
 				}
 			} else if (strcmp(item->string, "point_num") == 0)
 				attri.point_num = item->valueint;
+			else if (strcmp(item->string, "is_bezier") == 0)
+				attri.is_bezier = item->valueint;
 			else if (strcmp(item->string, "cb") == 0)
 				;
 			else
@@ -238,7 +240,7 @@ tui_obj_t * tui_com_chart_create_json(tui_obj_t * par, tJSON* attri_json, tui_ma
 		}
 	}
 
-	attri.cb = tui_com_get_func(attri.obj.obj_id, map_cb);
+	attri.cb = (tui_com_chart_cb_t)tui_com_get_func(attri.obj.obj_id, map_cb);
 
 	tui_com_chart_set_attri(ret, &attri);
 

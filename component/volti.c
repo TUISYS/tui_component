@@ -43,7 +43,7 @@ tui_obj_t * tui_com_volti_create(tui_obj_t * par)
 int tui_com_volti_set_attri(tui_obj_t *com_volti, tui_com_volti_attri_t *attri)
 {
 	tui_com_volti_attri_t *attri_me;
-	tui_image_attri_t attri_img = { 0 };
+	tui_image_attri_t attri_img = { 0 };//注意先清空结构体，避免随机值
 
 	if (com_volti == NULL) {
 		printf("tui_com_volti_set_attri L%d: faile\n", __LINE__);
@@ -199,7 +199,7 @@ void tui_com_volti_set_num(tui_obj_t *com_volti, uint8_t num)
 tui_obj_t * tui_com_volti_create_json(tui_obj_t * par, tJSON* attri_json, tui_map_cb_t map_cb[])
 {
 	tui_obj_t *ret;
-	tui_com_volti_attri_t attri = { 0 };
+	tui_com_volti_attri_t attri = { 0 };//注意先清空结构体，避免随机值
 	tJSON *item, *array;
 	int32_t num, i;
 
@@ -307,7 +307,7 @@ tui_obj_t * tui_com_volti_create_json(tui_obj_t * par, tJSON* attri_json, tui_ma
 		}
 	}
 
-	attri.cb = tui_com_get_func(attri.obj.obj_id, map_cb);
+	attri.cb = (tui_com_volti_cb_t)tui_com_get_func(attri.obj.obj_id, map_cb);
 
 	tui_com_volti_set_attri(ret, &attri);
 

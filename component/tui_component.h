@@ -9,8 +9,7 @@ static void* tui_com_get_com_attri(tui_obj_t *com_dial)
 		tui_container_get_attri(com_dial, &attri_root);
 
 		return  attri_root.attri_com;
-	}
-	else {
+	} else {
 		return NULL;
 	}
 }
@@ -31,29 +30,29 @@ static void * tui_com_get_func(uint32_t obj_id, tui_map_cb_t map_cb[])
 }
 
 /*------------------------
- *  dialåˆ»åº¦è¡¨ç›˜
+ *  dial¿Ì¶È±íÅÌ
  *------------------------*/
 typedef void(*tui_com_dial_cb_t)(tui_obj_t *obj, tui_event_e event, int32_t value);
 typedef struct {
-	/* é€šç”¨å±æ€§ */
+	/* Í¨ÓÃÊôĞÔ */
 	tui_object_attri_t obj;
 	tui_obj_t *bg_img_obj;
 	tui_obj_t *point_img_obj;
 	tui_obj_t *txt_obj;
-	/* åˆ»åº¦è¡¨ç›˜å›è°ƒå‡½æ•°ï¼Œè¿”å›å½“å‰å€¼ */
+	/* ¿Ì¶È±íÅÌ»Øµ÷º¯Êı£¬·µ»Øµ±Ç°Öµ */
 	tui_com_dial_cb_t cb;
 
-	char *bg_img_path;
-	tui_point_t bg_img_pt;
+	char *bg_img_path;                      /* ¿Ì¶È±íÅÌ±³¾°Í¼Æ¬Â·¾¶ */
+	tui_point_t bg_img_pt;                  /* ¿Ì¶È±íÅÌ±³¾°Í¼Æ¬ËùÔÚµÄ×ø±êx£¬y */
 
-	char *point_img_path;
-	tui_point_t point_img_pt;
-	tui_point_t point_img_rotate_pt;
+	char *point_img_path;                   /* ¿Ì¶È±íÅÌÖ¸ÕëÍ¼Æ¬Â·¾¶ */
+	tui_point_t point_img_pt;               /* ¿Ì¶È±íÅÌÖ¸ÕëÍ¼Æ¬ËùÔÚµÄ×ø±êx£¬y */
+	tui_point_t point_img_rotate_pt;        /* ¿Ì¶È±íÅÌÖ¸ÕëÍ¼Æ¬µÄĞı×ª×ø±êµãx£¬y */
 
-	char txt[12];
-	tui_point_t txt_pt;
-	int32_t txt_fnt_size;
-	uint32_t txt_fnt_color;
+	char txt[12];                           /* ¿Ì¶È±íÅÌÖ¸ÕëµÄÖµ0~100 */
+	tui_point_t txt_pt;                     /* ¿Ì¶È±íÅÌÖ¸ÕëÖµµÄlabelÎ»ÖÃ */
+	int32_t txt_fnt_size;                   /* ¿Ì¶È±íÅÌÖ¸ÕëÖµµÄlabel×ÖÌå´óĞ¡ */
+	uint32_t txt_fnt_color;                 /* ¿Ì¶È±íÅÌÖ¸ÕëÖµµÄlabel×ÖÌåÑÕÉ« */
 } tui_com_dial_attri_t;
 tui_obj_t * tui_com_dial_create(tui_obj_t * par);
 int tui_com_dial_set_attri(tui_obj_t *com_dial, tui_com_dial_attri_t *attri);
@@ -61,34 +60,34 @@ int tui_com_dial_get_attri(tui_obj_t *com_dial, tui_com_dial_attri_t *attri);
 void tui_com_dial_set_point_angle(tui_obj_t *com_dial, int value/* 0~100 */);
 
 /*------------------------
- *  clockæ—¶é’Ÿè¡¨ç›˜
+ *  clockÊ±ÖÓ±íÅÌ
  *------------------------*/
 typedef void(*tui_com_clock_cb_t)(tui_obj_t *obj, tui_event_e event, int32_t sec);
 typedef struct {
-	/* é€šç”¨å±æ€§ */
+	/* Í¨ÓÃÊôĞÔ */
 	tui_object_attri_t obj;
 	tui_obj_t *bg_img_obj;
 	tui_obj_t *point_h_img_obj;
 	tui_obj_t *point_m_img_obj;
 	tui_obj_t *point_s_img_obj;
 	tui_timer_t *clock_timer;
-	/* åˆ»åº¦è¡¨ç›˜å›è°ƒå‡½æ•°ï¼Œè¿”å›å½“å‰å€¼ */
+	/* Ê±ÖÓ±íÅÌ»Øµ÷º¯Êı£¬·µ»Øµ±Ç°Öµ */
 	tui_com_clock_cb_t cb;
 
-	char *bg_img_path;
-	tui_point_t bg_img_pt;
+	char *bg_img_path;                      /* Ê±ÖÓ±íÅÌ±³¾°Í¼Æ¬Â·¾¶ */
+	tui_point_t bg_img_pt;                  /* Ê±ÖÓ±íÅÌ±³¾°Í¼Æ¬ËùÔÚµÄ×ø±êx£¬y */
 
-	char *point_h_img_path;
-	tui_point_t point_h_img_pt;
-	tui_point_t point_h_img_rotate_pt;
+	char *point_h_img_path;                 /* Ê±ÖÓ±íÅÌ`Ê±`Ö¸ÕëÍ¼Æ¬Â·¾¶ */
+	tui_point_t point_h_img_pt;             /* Ê±ÖÓ±íÅÌ`Ê±`Ö¸ÕëÍ¼Æ¬ËùÔÚµÄ×ø±êx£¬y */
+	tui_point_t point_h_img_rotate_pt;      /* Ê±ÖÓ±íÅÌ`Ê±`Ö¸ÕëÍ¼Æ¬µÄĞı×ª×ø±êµãx£¬y */
 
-	char *point_m_img_path;
-	tui_point_t point_m_img_pt;
-	tui_point_t point_m_img_rotate_pt;
+	char *point_m_img_path;                 /* Ê±ÖÓ±íÅÌ`·Ö`Ö¸ÕëÍ¼Æ¬Â·¾¶ */
+	tui_point_t point_m_img_pt;             /* Ê±ÖÓ±íÅÌ`·Ö`Ö¸ÕëÍ¼Æ¬ËùÔÚµÄ×ø±êx£¬y */
+	tui_point_t point_m_img_rotate_pt;      /* Ê±ÖÓ±íÅÌ`·Ö`Ö¸ÕëÍ¼Æ¬µÄĞı×ª×ø±êµãx£¬y */
 
-	char *point_s_img_path;
-	tui_point_t point_s_img_pt;
-	tui_point_t point_s_img_rotate_pt;
+	char *point_s_img_path;                 /* Ê±ÖÓ±íÅÌ`Ãë`Ö¸ÕëÍ¼Æ¬Â·¾¶ */
+	tui_point_t point_s_img_pt;             /* Ê±ÖÓ±íÅÌ`Ãë`Ö¸ÕëÍ¼Æ¬ËùÔÚµÄ×ø±êx£¬y */
+	tui_point_t point_s_img_rotate_pt;      /* Ê±ÖÓ±íÅÌ`Ãë`Ö¸ÕëÍ¼Æ¬µÄĞı×ª×ø±êµãx£¬y */
 
 } tui_com_clock_attri_t;
 tui_obj_t * tui_com_clock_create(tui_obj_t * par);
@@ -96,21 +95,21 @@ int tui_com_clock_set_attri(tui_obj_t *com_clock, tui_com_clock_attri_t *attri);
 int tui_com_clock_get_attri(tui_obj_t *com_clock, tui_com_clock_attri_t *attri);
 
 /*------------------------
- *  chartå›¾æ ‡æ›²çº¿
+ *  chartÍ¼±íÕÛÏß
  *------------------------*/
 typedef void(*tui_com_chart_cb_t)(tui_obj_t *obj, tui_event_e event, int32_t value);
 typedef struct {
-	/* é€šç”¨å±æ€§ */
+	/* Í¨ÓÃÊôĞÔ */
 	tui_object_attri_t obj;
 	tui_obj_t *bg_chart_obj;
 	tui_obj_t *chart_line_obj;
 	tui_obj_t **chart_cursor_obj;
 	tui_point_t *point_array;
-	/* åˆ»åº¦è¡¨ç›˜å›è°ƒå‡½æ•°ï¼Œè¿”å›å½“å‰å€¼ */
+	/* Í¼±íÕÛÏß»Øµ÷º¯Êı£¬·µ»Øµ±Ç°Öµ */
 	tui_com_chart_cb_t cb;
 	
-	uint16_t point_num;
-
+	uint16_t point_num;                     /* Í¼±íµÄµãµÄÊıÁ¿ */
+	bool is_bezier;                         /* Í¼±íµÄÏÔÊ¾·½Ê½£¬ÕÛÏß»òÕßÇúÏß */
 } tui_com_chart_attri_t;
 tui_obj_t * tui_com_chart_create(tui_obj_t * par);
 int tui_com_chart_set_attri(tui_obj_t *com_chart, tui_com_chart_attri_t *attri);
@@ -118,11 +117,11 @@ int tui_com_chart_get_attri(tui_obj_t *com_chart, tui_com_chart_attri_t *attri);
 void tui_com_chart_set_point(tui_obj_t *com_chart, int32_t index, int32_t value);
 
 /*------------------------
- *  calendaræ—¥å†
+ *  calendarÈÕÀú
  *------------------------*/
 typedef void(*tui_com_calendar_cb_t)(tui_obj_t *obj, tui_event_e event, int32_t value);
 typedef struct {
-	/* é€šç”¨å±æ€§ */
+	/* Í¨ÓÃÊôĞÔ */
 	tui_object_attri_t obj;
 	tui_obj_t *pre_month_bnt;
 	tui_obj_t *pre_month_txt;
@@ -134,12 +133,12 @@ typedef struct {
 	tui_obj_t *day_text_obj[42]; /* [6][7] */
 	tui_time_t set_time;
 	tui_timer_t *ref_timer;
-	/* åˆ»åº¦è¡¨ç›˜å›è°ƒå‡½æ•°ï¼Œè¿”å›å½“å‰å€¼ */
+	/* ÈÕÀú»Øµ÷º¯Êı£¬·µ»Øµ±Ç°Öµ */
 	tui_com_calendar_cb_t cb;
 
-	char week_str[7][10];
-	char pre_str[16];
-	char next_str[16];
+	char week_str[7][10];                  /* ĞÇÆÚµÄ×Ö·û£ºÒ»¡¢¶ş¡¢Èı¡¢ËÄ¡¢Îå¡¢Áù¡¢ÈÕ */
+	char pre_str[16];                      /* ÉÏÒ»¸öµÄ×Ö·û */
+	char next_str[16];                     /* ÏÂÒ»¸öµÄ×Ö·û */
 } tui_com_calendar_attri_t;
 tui_obj_t * tui_com_calendar_create(tui_obj_t * par);
 int tui_com_calendar_set_attri(tui_obj_t *com_calendar, tui_com_calendar_attri_t *attri);
@@ -147,25 +146,25 @@ int tui_com_calendar_get_attri(tui_obj_t *com_calendar, tui_com_calendar_attri_t
 void tui_com_calendar_show_year_month(tui_obj_t *com_calendar, int year, int month);
 
 /*------------------------
-*  voltiç¿»é¡µåŠ¨ç”»
+*  volti·­Ò³¶¯»­
 *------------------------*/
 typedef void(*tui_com_volti_cb_t)(tui_obj_t *obj, tui_event_e event, int32_t value);
 typedef struct {
-	/* é€šç”¨å±æ€§ */
+	/* Í¨ÓÃÊôĞÔ */
 	tui_object_attri_t obj;
 	tui_obj_t *img_old_up;
 	tui_obj_t *img_old_down;
 	tui_obj_t *img_new_up;
 	tui_obj_t *img_new_down;
 	tui_coord_t height_d;
-	/* åˆ»åº¦è¡¨ç›˜å›è°ƒå‡½æ•°ï¼Œè¿”å›å½“å‰å€¼ */
+	/* ·­Ò³¶¯»­»Øµ÷º¯Êı£¬·µ»Øµ±Ç°Öµ */
 	tui_com_volti_cb_t cb;
 	
-	uint8_t cur_num;
-	char up_num_img_path[10][32];
-	tui_point_t up_num_img_pt;
-	char down_num_img_path[10][32];
-	tui_point_t down_num_img_pt;
+	uint8_t cur_num;                      /* µ±Ç°µÄÊıÖµ */
+	char up_num_img_path[10][32];         /* Êı×ÖÍ¼Æ¬µÄÉÏ²¿·ÖÍ¼Æ¬Â·¾¶ */
+	tui_point_t up_num_img_pt;            /* Êı×ÖÍ¼Æ¬µÄÉÏ²¿·ÖÍ¼Æ¬×ø±êÎ»ÖÃx£¬y */
+	char down_num_img_path[10][32];       /* Êı×ÖÍ¼Æ¬µÄÏÂ²¿·ÖÍ¼Æ¬Â·¾¶ */
+	tui_point_t down_num_img_pt;          /* Êı×ÖÍ¼Æ¬µÄÏÂ²¿·ÖÍ¼Æ¬×ø±êÎ»ÖÃx£¬y */
 } tui_com_volti_attri_t;
 tui_obj_t * tui_com_volti_create(tui_obj_t * par);
 int tui_com_volti_set_attri(tui_obj_t *com_volti, tui_com_volti_attri_t *attri);
@@ -173,13 +172,46 @@ int tui_com_volti_get_attri(tui_obj_t *com_volti, tui_com_volti_attri_t *attri);
 void tui_com_volti_set_num(tui_obj_t *com_volti, uint8_t num);
 
 /*------------------------
- *  templateæ¨¡æ¿ç»„ä»¶
+*  msgboxÏûÏ¢¿ò
+*------------------------*/
+typedef void(*tui_com_msgbox_cb_t)(tui_obj_t *obj, tui_event_e event, int32_t value);
+typedef struct {
+	/* Í¨ÓÃÊôĞÔ */
+	tui_object_attri_t obj;
+	tui_obj_t * par;
+	tui_obj_t *msg_txt;
+	tui_obj_t *yes_bnt;
+	tui_obj_t *yes_txt;
+	tui_obj_t *no_bnt;
+	tui_obj_t *no_txt;
+	tui_obj_t *ok_bnt;
+	tui_obj_t *ok_txt;
+	tui_timer_t *del_timer;
+	/* ÏûÏ¢¿ò»Øµ÷º¯Êı£¬·µ»Øµ±Ç°Öµ */
+	tui_com_msgbox_cb_t cb;
+	
+	uint8_t btn_num;/* 2 = yes no; 1 = ok; 0 = no btn*/
+
+	char *msg_str;                        /* ÏûÏ¢¿òµÄÈ·¶¨°´Å¥µÄ×Ö·û */
+
+	char *yes_str;
+	char *no_str;                         /* ÏûÏ¢¿òµÄÈ¡Ïû°´Å¥µÄ×Ö·û */
+
+	char *ok_str;                         /* ÏûÏ¢¿òµÄÌáÊ¾È·¶¨°´Å¥µÄ×Ö·û */
+} tui_com_msgbox_attri_t;
+tui_obj_t * tui_com_msgbox_create(tui_obj_t * par);
+int tui_com_msgbox_set_attri(tui_obj_t *com_msgbox, tui_com_msgbox_attri_t *attri);
+int tui_com_msgbox_get_attri(tui_obj_t *com_msgbox, tui_com_msgbox_attri_t *attri);
+void tui_com_msgbox_show_or_hide(tui_obj_t *com_msgbox, bool show_able);
+
+/*------------------------
+ *  templateÄ£°å×é¼ş
  *------------------------*/
 typedef void(*tui_com_template_cb_t)(tui_obj_t *obj, tui_event_e event, int32_t value);
 typedef struct {
-	/* é€šç”¨å±æ€§ */
+	/* Í¨ÓÃÊôĞÔ */
 	tui_object_attri_t obj;
-	/* åˆ»åº¦è¡¨ç›˜å›è°ƒå‡½æ•°ï¼Œè¿”å›å½“å‰å€¼ */
+	/* Ä£°å×é¼ş»Øµ÷º¯Êı£¬·µ»Øµ±Ç°Öµ */
 	tui_com_template_cb_t cb;
 } tui_com_template_attri_t;
 tui_obj_t * tui_com_template_create(tui_obj_t * par);

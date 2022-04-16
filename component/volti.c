@@ -16,7 +16,7 @@ tui_obj_t * tui_com_volti_create(tui_obj_t * par)
 {
 	tui_obj_t *ret;
 	tui_com_volti_attri_t *attri_com;
-	tui_container_attri_t attri_root = { 0 };
+	tui_container_attri_t attri_root = { 0 };//注意先清空结构体，避免随机值
 
 	attri_com = malloc(sizeof(tui_com_volti_attri_t));
 	if (attri_com == NULL) {

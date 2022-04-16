@@ -110,11 +110,13 @@ typedef struct {
 	
 	uint16_t point_num;                     /* 图表的点的数量 */
 	bool is_bezier;                         /* 图表的显示方式，折线或者曲线 */
+	uint16_t mode;                          /* 0：线、1：柱形*/
+	bool is_anim;                           /* 是否动画显示 */
 } tui_com_chart_attri_t;
 tui_obj_t * tui_com_chart_create(tui_obj_t * par);
 int tui_com_chart_set_attri(tui_obj_t *com_chart, tui_com_chart_attri_t *attri);
 int tui_com_chart_get_attri(tui_obj_t *com_chart, tui_com_chart_attri_t *attri);
-void tui_com_chart_set_point(tui_obj_t *com_chart, int32_t index, int32_t value);
+void tui_com_chart_set_point(tui_obj_t *com_chart, int32_t index, int32_t value);/* 0~1000 */
 
 /*------------------------
  *  calendar日历
@@ -179,6 +181,7 @@ typedef struct {
 	/* 通用属性 */
 	tui_object_attri_t obj;
 	tui_obj_t * par;
+	tui_obj_t * top_cont;
 	tui_obj_t *msg_txt;
 	tui_obj_t *yes_bnt;
 	tui_obj_t *yes_txt;

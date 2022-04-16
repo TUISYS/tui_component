@@ -1,5 +1,7 @@
 #include "tui.h"
 
+#define CLOCK_FAST_RUN_TEST	0
+
 static void tui_com_clock_container_cb(tui_obj_t *com_clock, tui_event_e event)
 {
 	tui_com_clock_attri_t *attri_me;
@@ -18,6 +20,9 @@ static void tui_com_clock_container_cb(tui_obj_t *com_clock, tui_event_e event)
 
 static void tui_com_clock_timer_cb(tui_timer_t * timer)
 {
+#if CLOCK_FAST_RUN_TEST
+	static uint32_t cnt = 0;
+#endif
 	static tui_time_t old_t = { 0 };
 	tui_time_t cur_t = { 0 };
 	tui_obj_t *com_clock;
@@ -33,6 +38,12 @@ static void tui_com_clock_timer_cb(tui_timer_t * timer)
 
 	cur_t = tui_get_localtime();
 
+#if CLOCK_FAST_RUN_TEST
+	cur_t.sec = cnt % 60;
+	cur_t.min = (cnt / 60) % 60;
+	cur_t.hour = (cnt / 3600) % 24;
+#endif
+
 	if (memcmp(&old_t, &cur_t, sizeof(tui_time_t))) {
 		/*        .0
 		 *
@@ -42,13 +53,18 @@ static void tui_com_clock_timer_cb(tui_timer_t * timer)
 		 *
 		 *	      .180
 		 */
-		tui_image_set_angle(attri_me->point_h_img_obj, (cur_t.hour * 5 + cur_t.min * 5 / 60) * 6, 0);
+		tui_image_set_angle(attri_me->point_h_img_obj, ((cur_t.hour%12) * 5 + cur_t.min * 5 / 60) * 6, 0);
 		tui_image_set_angle(attri_me->point_m_img_obj, cur_t.min * 6, 0);
 		tui_image_set_angle(attri_me->point_s_img_obj, cur_t.sec * 6, 0);
 
 		if (attri_me->cb) {
 			attri_me->cb(com_clock, TUI_EVENT_VALUE_CHANGED, cur_t.sec);
 		}
+		memcpy(&old_t, &cur_t, sizeof(tui_time_t));
+
+#if CLOCK_FAST_RUN_TEST
+		cnt++;
+#endif
 	}
 
 }
@@ -57,7 +73,7 @@ tui_obj_t * tui_com_clock_create(tui_obj_t * par)
 {
 	tui_obj_t *ret;
 	tui_com_clock_attri_t *attri_com;
-	tui_container_attri_t attri_root = { 0 };
+	tui_container_attri_t attri_root = { 0 };//注意先清空结构体，避免随机值
 
 	attri_com = malloc(sizeof(tui_com_clock_attri_t));
 	if (attri_com == NULL) {
@@ -152,7 +168,11 @@ int tui_com_clock_set_attri(tui_obj_t *com_clock, tui_com_clock_attri_t *attri)
 	tui_image_set_cur_img_index(attri_me->point_s_img_obj, 0);
 	tui_image_set_rotation_center_coor(attri_me->point_s_img_obj, attri_pt.rotate_pt.x, attri_pt.rotate_pt.y);	/* 设置图片旋转的参考原点坐标 */
 
+#if CLOCK_FAST_RUN_TEST
+	attri_me->clock_timer = tui_timer_create(tui_com_clock_timer_cb, 1, TUI_TIMER_PRIO_HIGH, com_clock);
+#else
 	attri_me->clock_timer = tui_timer_create(tui_com_clock_timer_cb, 500, TUI_TIMER_PRIO_HIGH, com_clock);
+#endif
 
 	cur_t = tui_get_localtime();
 	tui_image_set_angle(attri_me->point_h_img_obj, (cur_t.hour * 5 + cur_t.min * 5 / 60 ) * 6, 0);

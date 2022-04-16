@@ -1,5 +1,8 @@
 #include "tui.h"
 
+#define TUI_COM_CHART_VALUE_MAX 1000
+#define CHART_UNIT_SIZE	33
+
 static void tui_com_chart_container_cb(tui_obj_t *com_chart, tui_event_e event)
 {
 	tui_com_chart_attri_t *attri_me;
@@ -16,11 +19,56 @@ static void tui_com_chart_container_cb(tui_obj_t *com_chart, tui_event_e event)
 	}
 }
 
+static void tui_com_chart_anim_set_value_cb(tui_obj_t * com_chart, int32_t value)
+{
+	int i;
+	tui_point_t *point_array;
+	tui_com_chart_attri_t *attri_me;
+	tui_canvas_attri_t attri_bg = { 0 };
+
+	if (com_chart == NULL) {
+		printf("tui_com_chart_anim_show L%d: faile\n", __LINE__);
+		return;
+	}
+
+	attri_me = (tui_com_chart_attri_t *)tui_com_get_com_attri(com_chart);
+
+	if (attri_me == NULL || attri_me->point_array == NULL || attri_me->chart_cursor_obj == NULL) {
+		printf("tui_com_chart_anim_set_value_cb L%d: faile\n", __LINE__);
+		return;
+	}
+
+	tui_canvas_get_attri(attri_me->bg_chart_obj, &attri_bg);
+
+	point_array = malloc(attri_me->point_num*sizeof(tui_point_t));
+	if (point_array) {
+		memcpy(point_array, attri_me->point_array, attri_me->point_num*sizeof(tui_point_t));
+		if (attri_me->mode == 0) {
+			for (i = 0; i < attri_me->point_num; i++) {
+				point_array[i].y = attri_bg.obj.size.height - ((attri_bg.obj.size.height - attri_me->point_array[i].y) * value / 100);
+
+				tui_obj_set_x(attri_me->chart_cursor_obj[i], point_array[i].x - 5);
+				tui_obj_set_y(attri_me->chart_cursor_obj[i], point_array[i].y - 5);
+			}
+			tui_line_set_some_points_line(attri_me->chart_line_obj, point_array, attri_me->point_num, attri_me->is_bezier);
+		}
+		else {
+			for (i = 0; i < attri_me->point_num; i++) {
+				point_array[i].y = attri_bg.obj.size.height - ((attri_bg.obj.size.height - attri_me->point_array[i].y) * value / 100);
+
+				tui_obj_set_y(attri_me->chart_cursor_obj[i], point_array[i].y);
+				tui_obj_set_height(attri_me->chart_cursor_obj[i], attri_bg.obj.size.height - point_array[i].y);
+			}
+		}
+		free(point_array);
+	}
+}
+
 tui_obj_t * tui_com_chart_create(tui_obj_t * par)
 {
 	tui_obj_t *ret;
 	tui_com_chart_attri_t *attri_com;
-	tui_container_attri_t attri_root = { 0 };
+	tui_container_attri_t attri_root = { 0 };//注意先清空结构体，避免随机值
 
 	attri_com = malloc(sizeof(tui_com_chart_attri_t));
 	if (attri_com == NULL) {
@@ -46,14 +94,11 @@ tui_obj_t * tui_com_chart_create(tui_obj_t * par)
 
 int tui_com_chart_set_attri(tui_obj_t *com_chart, tui_com_chart_attri_t *attri)
 {
-	tui_container_attri_t attri_cursor = { 0 };
 	tui_com_chart_attri_t *attri_me;
 	tui_canvas_attri_t attri_bg = { 0 };//注意先清空结构体，避免随机值
 	tui_line_attri_t attri_line = { 0 };//注意先清空结构体，避免随机值
 	int bg_unit_w, i, hor_num, ver_num;
 	tui_point_t bg_points[2];
-
-#define CHART_UNIT_SIZE	33
 
 	if (com_chart == NULL) {
 		printf("tui_com_chart_set_attri L%d: faile\n", __LINE__);
@@ -70,7 +115,7 @@ int tui_com_chart_set_attri(tui_obj_t *com_chart, tui_com_chart_attri_t *attri)
 	tui_obj_set_hidden(com_chart, attri_me->obj.hidden);
 
 	attri_me->bg_chart_obj = tui_canvas_create(com_chart);
-	attri_bg.bg_color = 0xFFAFAFAF;
+	attri_bg.bg_color = 0xFFEFEFEF;
 	attri_bg.obj.size.width = attri_me->obj.size.width;
 	attri_bg.obj.size.height = attri_me->obj.size.height;
 	tui_canvas_set_attri(attri_me->bg_chart_obj, &attri_bg);
@@ -113,22 +158,16 @@ int tui_com_chart_set_attri(tui_obj_t *com_chart, tui_com_chart_attri_t *attri)
 	attri_me->chart_cursor_obj = malloc(attri_me->point_num*sizeof(tui_obj_t));
 	if (attri_me->point_array && attri_me->chart_cursor_obj) {
 		memset(attri_me->point_array, 0, attri_me->point_num*sizeof(tui_point_t));
-		for (i = 0; i < attri_me->point_num; i++) {
-			attri_me->chart_cursor_obj[i] = tui_container_create(com_chart);
-			attri_cursor.bg_color = 0xFFFF0000;
-			attri_cursor.obj.pt.x = 0;
-			attri_cursor.obj.pt.y = 0;
-			attri_cursor.obj.size.width = 10;
-			attri_cursor.obj.size.height = 10;
-			tui_container_set_attri(attri_me->chart_cursor_obj[i], &attri_cursor);
-			tui_obj_set_border_radius(attri_me->chart_cursor_obj[i], 0x7fff);
-		}
+		memset(attri_me->chart_cursor_obj, 0, attri_me->point_num*sizeof(tui_obj_t));
 	} else {
 		printf("tui_com_chart_set_attri L%d: malloc faile\n", __LINE__);
 	}
 
 	attri_me->obj.obj_id = attri->obj.obj_id;
 	tui_obj_set_id(com_chart, attri_me->obj.obj_id);
+
+	if (attri_me->is_anim)
+		tui_obj_anim_set_vaule(com_chart, 1000, 0, 100, TUI_ANIM_PATH_OVERSHOOT, tui_com_chart_anim_set_value_cb, NULL);
 
 	if (attri_me->cb != attri->cb) {
 		attri_me->cb = attri->cb;
@@ -158,12 +197,18 @@ void tui_com_chart_set_point(tui_obj_t *com_chart, int32_t index, int32_t value)
 {
 	int w;
 	tui_com_chart_attri_t *attri_me;
+	tui_container_attri_t attri_cursor = { 0 };
 	tui_canvas_attri_t attri_bg = { 0 };
 
 	if (com_chart == NULL) {
 		printf("tui_com_chart_set_point L%d: faile\n", __LINE__);
 		return;
 	}
+
+	if (value > TUI_COM_CHART_VALUE_MAX)
+		value = TUI_COM_CHART_VALUE_MAX;
+	if (value < 0)
+		value = 0;
 
 	attri_me = (tui_com_chart_attri_t *)tui_com_get_com_attri(com_chart);
 
@@ -173,17 +218,41 @@ void tui_com_chart_set_point(tui_obj_t *com_chart, int32_t index, int32_t value)
 	}
 	
 	tui_canvas_get_attri(attri_me->bg_chart_obj, &attri_bg);
+	
+	if (attri_me->mode == 0) {
+		w = attri_bg.obj.size.width / (attri_me->point_num - 1);
+		attri_me->point_array[index].x = w * index;
+		attri_me->point_array[index].y = attri_bg.obj.size.height - (attri_bg.obj.size.height * value / TUI_COM_CHART_VALUE_MAX);
+		if (attri_me->chart_cursor_obj[index] == NULL) {
+			attri_me->chart_cursor_obj[index] = tui_container_create(com_chart);
+			attri_cursor.bg_color = 0xFFFFFFFF;
+			attri_cursor.obj.pt.x = attri_me->point_array[index].x - 5;
+			attri_cursor.obj.pt.y = attri_me->point_array[index].y - 5;
+			attri_cursor.obj.size.width = 10;
+			attri_cursor.obj.size.height = 10;
+			tui_container_set_attri(attri_me->chart_cursor_obj[index], &attri_cursor);
+			tui_obj_set_border_radius(attri_me->chart_cursor_obj[index], 0x7fff);
+			tui_obj_set_border_color(attri_me->chart_cursor_obj[index], 0xFFFF0000);
+			tui_obj_set_border_width(attri_me->chart_cursor_obj[index], 1);
+		}
 
-	w = attri_bg.obj.size.width / (attri_me->point_num-1);
-
-	attri_me->point_array[index].x = w * index;
-	attri_me->point_array[index].y = attri_bg.obj.size.height - value;
-
-	tui_line_set_some_points_line(attri_me->chart_line_obj, attri_me->point_array, attri_me->point_num, attri_me->is_bezier);
-
-	tui_obj_set_x(attri_me->chart_cursor_obj[index], attri_me->point_array[index].x - 5);
-	tui_obj_set_y(attri_me->chart_cursor_obj[index], attri_me->point_array[index].y - 5);
+		tui_line_set_some_points_line(attri_me->chart_line_obj, attri_me->point_array, attri_me->point_num, attri_me->is_bezier);
+	} else {
+		w = attri_bg.obj.size.width / attri_me->point_num;
+		attri_me->point_array[index].x = (w * index) + (w / 4);
+		attri_me->point_array[index].y = attri_bg.obj.size.height - (attri_bg.obj.size.height * value / TUI_COM_CHART_VALUE_MAX);
+		if (attri_me->chart_cursor_obj[index] == NULL) {
+			attri_me->chart_cursor_obj[index] = tui_container_create(com_chart);
+			attri_cursor.bg_color = 0xFF3F0F1F | (0x18E<<(index%13));
+			attri_cursor.obj.pt.x = attri_me->point_array[index].x;
+			attri_cursor.obj.pt.y = attri_me->point_array[index].y;
+			attri_cursor.obj.size.width = w / 2;
+			attri_cursor.obj.size.height = (attri_bg.obj.size.height * value / TUI_COM_CHART_VALUE_MAX);
+			tui_container_set_attri(attri_me->chart_cursor_obj[index], &attri_cursor);
+		}
+	}
 }
+
 
 tui_obj_t * tui_com_chart_create_json(tui_obj_t * par, tJSON* attri_json, tui_map_cb_t map_cb[])
 {

@@ -339,7 +339,7 @@ tui_obj_t * tui_com_calendar_create(tui_obj_t * par)
 {
 	tui_obj_t *ret;
 	tui_com_calendar_attri_t *attri_com;
-	tui_container_attri_t attri_root = { 0 };
+	tui_container_attri_t attri_root = { 0 };//注意先清空结构体，避免随机值
 
 	attri_com = malloc(sizeof(tui_com_calendar_attri_t));
 	if (attri_com == NULL) {
@@ -410,6 +410,7 @@ int tui_com_calendar_set_attri(tui_obj_t *com_calendar, tui_com_calendar_attri_t
 	attri_txt.align = TUI_LABEL_ALIGN_CENTER;
 	tui_label_set_attri(attri_me->year_text_obj, &attri_txt);
 	tui_label_set_align_mid(attri_me->year_text_obj, 1);
+	tui_obj_set_bg_color(attri_me->year_text_obj, 0xFFE0E0E0);
 
 	for (i = 0; i < 7; i++) {
 		attri_me->week_text_obj[i] = tui_label_create(com_calendar);

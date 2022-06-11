@@ -124,7 +124,7 @@ int tui_com_dial_set_attri(tui_obj_t *com_dial, tui_com_dial_attri_t *attri)
 	attri_txt.obj.pt.x = attri_me->txt_pt.x;
 	attri_txt.obj.pt.y = attri_me->txt_pt.y;
 	attri_txt.fnt_size = attri_me->txt_fnt_size;
-	attri_txt.txt = attri_me->txt;
+	attri_txt.txt = "";
 	attri_txt.fnt_color = attri_me->txt_fnt_color;
 	attri_txt.mode = TUI_LABEL_LONG_EXPAND;
 	attri_txt.align = TUI_LABEL_ALIGN_CENTER;
@@ -187,7 +187,7 @@ void tui_com_dial_set_point_angle(tui_obj_t *com_dial, int value/* 0~100 */)
 	 *
 	 *	      .180
 	 */
-	tui_image_set_angle(attri_me->point_img_obj, cur_point_angle, 1);/* 最后一个参数0是没有动画过程，1是有动画过程 */
+	tui_image_set_angle(attri_me->point_img_obj, cur_point_angle, 0);/* 最后一个参数0是没有动画过程，1是有动画过程 */
 }
 
 tui_obj_t * tui_com_dial_create_json(tui_obj_t * par, tJSON* attri_json, tui_map_cb_t map_cb[])
@@ -266,8 +266,6 @@ tui_obj_t * tui_com_dial_create_json(tui_obj_t * par, tJSON* attri_json, tui_map
 					array = tJSON_GetArrayItem(item, 1);
 					attri.txt_pt.y = array->valueint;
 				}
-			} else if (strcmp(item->string, "txt") == 0) {
-				strcpy(attri.txt, item->valuestring);
 			} else if (strcmp(item->string, "txt_fnt_size") == 0) {
 				attri.txt_fnt_size = item->valueint;
 			} else if (strcmp(item->string, "txt_fnt_color") == 0) {

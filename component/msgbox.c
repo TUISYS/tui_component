@@ -2,8 +2,8 @@
 
 #define TUI_COM_MSGBOX_BTN_W				120
 #define TUI_COM_MSGBOX_BTN_H				40
-#define TUI_COM_MSGBOX_MSG_TXT_FNT_SIZE		32
-#define TUI_COM_MSGBOX_BTN_TXT_FNT_SIZE		32
+#define TUI_COM_MSGBOX_MSG_TXT_FNT_SIZE		30
+#define TUI_COM_MSGBOX_BTN_TXT_FNT_SIZE		30
 #define TUI_COM_MSGBOX_NO_BTN_TIMER_PERIOD	8000
 
 static void tui_com_msgbox_container_cb(tui_obj_t *com_msgbox, tui_event_e event)
@@ -141,7 +141,6 @@ tui_obj_t * tui_com_msgbox_create(tui_obj_t * par)
 
 	tui_config_get_screen_resolution((int *)(&attri_root.obj.size.width), (int *)(&attri_root.obj.size.height));
 
-	attri_root.obj.hidden = 1;
 	attri_root.bg_color = 0xAF000000;
 	attri_root.attri_com = (void*)attri_com;
 	attri_root.cb = tui_com_msgbox_container_cb;
@@ -182,6 +181,7 @@ int tui_com_msgbox_set_attri(tui_obj_t *com_msgbox, tui_com_msgbox_attri_t *attr
 
 	attri_me->obj.obj_id = attri->obj.obj_id;
 	tui_obj_set_id(com_msgbox, attri_me->obj.obj_id);
+	tui_obj_set_hidden(com_msgbox, attri_me->obj.hidden);
 
 	attri_me->msg_txt = tui_label_create(attri_me->top_cont);
 	attri_txt.obj.pt.x = 0;
@@ -263,7 +263,7 @@ int tui_com_msgbox_set_attri(tui_obj_t *com_msgbox, tui_com_msgbox_attri_t *attr
 		attri_txt.obj.pt.y = attri_btn.obj.pt.y;
 		attri_txt.obj.size.width = attri_btn.obj.size.width;
 		attri_txt.obj.size.height = attri_btn.obj.size.height;
-		attri_txt.txt = attri_me->yes_str;
+		attri_txt.txt = attri_me->ok_str;
 		attri_txt.fnt_size = TUI_COM_MSGBOX_BTN_TXT_FNT_SIZE;
 		attri_txt.fnt_color = 0xFF000000;
 		attri_txt.mode = TUI_LABEL_LONG_DOT;
@@ -326,7 +326,11 @@ void tui_com_msgbox_show_or_hide(tui_obj_t *com_msgbox, bool show_able)
 		tui_obj_set_parent(com_msgbox, attri_me->par);
 	}
 
-	tui_obj_set_hidden(com_msgbox, !show_able);
+	if (show_able) {
+		tui_obj_anim_fade_in(com_msgbox, 200, NULL);
+	} else {
+		tui_obj_anim_fade_out(com_msgbox, 200, NULL);
+	}
 }
 
 tui_obj_t * tui_com_msgbox_create_json(tui_obj_t * par, tJSON* attri_json, tui_map_cb_t map_cb[])

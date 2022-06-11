@@ -45,19 +45,23 @@ static void tui_com_chart_anim_set_value_cb(tui_obj_t * com_chart, int32_t value
 		memcpy(point_array, attri_me->point_array, attri_me->point_num*sizeof(tui_point_t));
 		if (attri_me->mode == 0) {
 			for (i = 0; i < attri_me->point_num; i++) {
-				point_array[i].y = attri_bg.obj.size.height - ((attri_bg.obj.size.height - attri_me->point_array[i].y) * value / 100);
+				if (attri_me->chart_cursor_obj[i]) {
+					point_array[i].y = attri_bg.obj.size.height - ((attri_bg.obj.size.height - attri_me->point_array[i].y) * value / 100);
 
-				tui_obj_set_x(attri_me->chart_cursor_obj[i], point_array[i].x - 5);
-				tui_obj_set_y(attri_me->chart_cursor_obj[i], point_array[i].y - 5);
+					tui_obj_set_x(attri_me->chart_cursor_obj[i], point_array[i].x - 5);
+					tui_obj_set_y(attri_me->chart_cursor_obj[i], point_array[i].y - 5);
+				}
 			}
 			tui_line_set_some_points_line(attri_me->chart_line_obj, point_array, attri_me->point_num, attri_me->is_bezier);
 		}
 		else {
 			for (i = 0; i < attri_me->point_num; i++) {
-				point_array[i].y = attri_bg.obj.size.height - ((attri_bg.obj.size.height - attri_me->point_array[i].y) * value / 100);
+				if (attri_me->chart_cursor_obj[i]) {
+					point_array[i].y = attri_bg.obj.size.height - ((attri_bg.obj.size.height - attri_me->point_array[i].y) * value / 100);
 
-				tui_obj_set_y(attri_me->chart_cursor_obj[i], point_array[i].y);
-				tui_obj_set_height(attri_me->chart_cursor_obj[i], attri_bg.obj.size.height - point_array[i].y);
+					tui_obj_set_y(attri_me->chart_cursor_obj[i], point_array[i].y);
+					tui_obj_set_height(attri_me->chart_cursor_obj[i], attri_bg.obj.size.height - point_array[i].y);
+				}
 			}
 		}
 		free(point_array);
@@ -216,6 +220,11 @@ void tui_com_chart_set_point(tui_obj_t *com_chart, int32_t index, int32_t value)
 		printf("tui_com_chart_set_point L%d: faile\n", __LINE__);
 		return;
 	}
+
+	if (index >= attri_me->point_num) {
+		printf("tui_com_chart_set_point L%d: faile, %d >= %d\n", __LINE__, index, attri_me->point_num);
+		return;
+	}
 	
 	tui_canvas_get_attri(attri_me->bg_chart_obj, &attri_bg);
 	
@@ -253,6 +262,29 @@ void tui_com_chart_set_point(tui_obj_t *com_chart, int32_t index, int32_t value)
 	}
 }
 
+void tui_com_chart_set_bezier(tui_obj_t *com_chart, bool is_bezier)
+{
+	tui_com_chart_attri_t *attri_me;
+
+	if (com_chart == NULL) {
+		printf("tui_com_chart_set_mode L%d: faile\n", __LINE__);
+		return;
+	}
+
+	attri_me = (tui_com_chart_attri_t *)tui_com_get_com_attri(com_chart);
+
+	if (attri_me == NULL || attri_me->point_array == NULL || attri_me->chart_cursor_obj == NULL) {
+		printf("tui_com_chart_set_mode L%d: faile\n", __LINE__);
+		return;
+	}
+
+	attri_me->is_bezier = is_bezier;
+	
+	if (attri_me->mode == 0) {
+		if (attri_me->is_anim)
+			tui_obj_anim_set_vaule(com_chart, 1000, 0, 100, TUI_ANIM_PATH_OVERSHOOT, tui_com_chart_anim_set_value_cb, NULL);
+	}
+}
 
 tui_obj_t * tui_com_chart_create_json(tui_obj_t * par, tJSON* attri_json, tui_map_cb_t map_cb[])
 {
@@ -300,8 +332,12 @@ tui_obj_t * tui_com_chart_create_json(tui_obj_t * par, tJSON* attri_json, tui_ma
 				}
 			} else if (strcmp(item->string, "point_num") == 0)
 				attri.point_num = item->valueint;
+			else if (strcmp(item->string, "mode") == 0)
+				attri.mode = item->valueint;
 			else if (strcmp(item->string, "is_bezier") == 0)
 				attri.is_bezier = item->valueint;
+			else if (strcmp(item->string, "is_anim") == 0)
+				attri.is_anim = item->valueint;
 			else if (strcmp(item->string, "cb") == 0)
 				;
 			else

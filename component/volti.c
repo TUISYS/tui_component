@@ -137,12 +137,12 @@ static void tui_com_volti_anim1_end_cb(tui_obj_t * obj)
 	}
 	attri_me = (tui_com_volti_attri_t *)tui_com_get_com_attri(com_volti);
 
-	tui_image_set_image_src(attri_me->img_new_up, 0, attri_me->up_num_img_path[attri_me->cur_num]);
-	tui_image_set_image_src(attri_me->img_old_up, 0, attri_me->up_num_img_path[attri_me->cur_num]);
+	//tui_image_set_image_src(attri_me->img_new_up, 0, attri_me->up_num_img_path[attri_me->cur_num]);
+	//tui_image_set_image_src(attri_me->img_old_up, 0, attri_me->up_num_img_path[attri_me->cur_num]);
 
-	tui_image_set_image_src(attri_me->img_old_down, 0, attri_me->down_num_img_path[attri_me->cur_num]);
-	tui_image_set_image_src(attri_me->img_new_down, 0, attri_me->down_num_img_path[attri_me->cur_num]);
-	tui_image_set_size(attri_me->img_new_down, tui_obj_get_width(attri_me->img_new_down), 0);
+	//tui_image_set_image_src(attri_me->img_old_down, 0, attri_me->down_num_img_path[attri_me->cur_num]);
+	//tui_image_set_image_src(attri_me->img_new_down, 0, attri_me->down_num_img_path[attri_me->cur_num]);
+	//tui_image_set_size(attri_me->img_new_down, tui_obj_get_width(attri_me->img_new_down), 0);
 
 	if (attri_me->cb) {
 		attri_me->cb(com_volti, TUI_EVENT_VALUE_CHANGED, attri_me->cur_num);

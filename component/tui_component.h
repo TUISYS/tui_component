@@ -1,6 +1,8 @@
 #ifndef __TUI_COMPONENT_H__
 #define __TUI_COMPONENT_H__
 
+#define TUI_COMPONENT_ENABEL
+
 static void* tui_com_get_com_attri(tui_obj_t *com_dial)
 {
 	if (com_dial) {
@@ -30,6 +32,11 @@ static void * tui_com_get_func(uint32_t obj_id, tui_map_cb_t map_cb[])
 }
 
 /*------------------------
+ *  为了让UIStudio知道，需要注册组件
+ *------------------------*/
+void tui_com_reg_func_map(void);
+
+/*------------------------
  *  dial刻度表盘
  *------------------------*/
 typedef void(*tui_com_dial_cb_t)(tui_obj_t *obj, tui_event_e event, int32_t value);
@@ -49,7 +56,6 @@ typedef struct {
 	tui_point_t point_img_pt;               /* 刻度表盘指针图片所在的坐标x，y */
 	tui_point_t point_img_rotate_pt;        /* 刻度表盘指针图片的旋转坐标点x，y */
 
-	char txt[12];                           /* 刻度表盘指针的值0~100 */
 	tui_point_t txt_pt;                     /* 刻度表盘指针值的label位置 */
 	int32_t txt_fnt_size;                   /* 刻度表盘指针值的label字体大小 */
 	uint32_t txt_fnt_color;                 /* 刻度表盘指针值的label字体颜色 */
@@ -116,36 +122,41 @@ typedef struct {
 tui_obj_t * tui_com_chart_create(tui_obj_t * par);
 int tui_com_chart_set_attri(tui_obj_t *com_chart, tui_com_chart_attri_t *attri);
 int tui_com_chart_get_attri(tui_obj_t *com_chart, tui_com_chart_attri_t *attri);
+void tui_com_chart_set_bezier(tui_obj_t *com_chart, bool is_bezier);
 void tui_com_chart_set_point(tui_obj_t *com_chart, int32_t index, int32_t value);/* 0~1000 */
 
 /*------------------------
  *  calendar日历
  *------------------------*/
+extern const char * tui_com_calendar_get_lunar_calendar(int year, int month, int day, int *is_jieri, char *get_nl_string);
 typedef void(*tui_com_calendar_cb_t)(tui_obj_t *obj, tui_event_e event, int32_t value);
 typedef struct {
 	/* 通用属性 */
 	tui_object_attri_t obj;
-	tui_obj_t *pre_month_bnt;
-	tui_obj_t *pre_month_txt;
-	tui_obj_t *next_month_bnt;
-	tui_obj_t *next_month_txt;
-	tui_obj_t *year_text_obj;
+	tui_obj_t *year_dropdown_bnt;
+	tui_obj_t *year_txt;
+	tui_obj_t *month_dropdown_bnt;
+	tui_obj_t *month_txt;
+	tui_obj_t *yl_year_text_obj;
+	tui_obj_t *nl_year_text_obj;
 	tui_obj_t *year_line_obj;
 	tui_obj_t *week_text_obj[7];
 	tui_obj_t *day_text_obj[42]; /* [6][7] */
+	tui_obj_t *nl_text_obj[42]; /* [6][7] */
+	uint32_t   yymmdd[42]; /* [6][7] */
 	tui_time_t set_time;
 	tui_timer_t *ref_timer;
 	/* 日历回调函数，返回当前值 */
 	tui_com_calendar_cb_t cb;
 
 	char week_str[7][10];                  /* 星期的字符：一、二、三、四、五、六、日 */
-	char pre_str[16];                      /* 上一个的字符 */
-	char next_str[16];                     /* 下一个的字符 */
+	char year_str[16];                      /* 上一个的字符 */
+	char month_str[16];                     /* 下一个的字符 */
 } tui_com_calendar_attri_t;
 tui_obj_t * tui_com_calendar_create(tui_obj_t * par);
 int tui_com_calendar_set_attri(tui_obj_t *com_calendar, tui_com_calendar_attri_t *attri);
 int tui_com_calendar_get_attri(tui_obj_t *com_calendar, tui_com_calendar_attri_t *attri);
-void tui_com_calendar_show_year_month(tui_obj_t *com_calendar, int year, int month);
+void tui_com_calendar_show_year_month(tui_obj_t *com_calendar, int year, int month, int day);
 
 /*------------------------
 *  volti翻页动画
@@ -193,11 +204,11 @@ typedef struct {
 	/* 消息框回调函数，返回当前值 */
 	tui_com_msgbox_cb_t cb;
 	
-	uint8_t btn_num;/* 2 = yes no; 1 = ok; 0 = no btn*/
+	uint8_t btn_num;                      /* 2 = yes no; 1 = ok; 0 = no btn*/
 
-	char *msg_str;                        /* 消息框的确定按钮的字符 */
+	char *msg_str;                        /* 消息框的内容字符 */
 
-	char *yes_str;
+	char *yes_str;                        /* 消息框的确定按钮的字符 */
 	char *no_str;                         /* 消息框的取消按钮的字符 */
 
 	char *ok_str;                         /* 消息框的提示确定按钮的字符 */

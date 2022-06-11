@@ -23,5 +23,9 @@ char *component_reg_cb_map[] = {
 
 
 
+void tui_com_reg_func_map(void)
+{
+	tui_view_reg_func(component_reg_cb_map);
+}
 
 

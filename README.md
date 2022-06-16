@@ -23,7 +23,7 @@ void tui_com_calendar_test(void)
 ```
 实际效果如图：
 <p align="center">
-<img src="https://i.postimg.cc/W4H36WHZ/calendar.gif">
+<img src="https://s1.imagehub.cc/images/2022/06/16/calendar.gif">
 </p>
 
 ## 时钟（clock.c）
@@ -67,7 +67,7 @@ void tui_com_clock_test(void)
 ```
 效果如图：
 <p align="center">
-<img src="https://i.postimg.cc/Jhn0XVPm/clock.gif">
+<img src="https://s1.imagehub.cc/images/2022/06/16/clock.gif">
 </p>
 
 ## 仪表盘（dial.c）
@@ -104,7 +104,7 @@ void tui_com_dial_test(void)
 ```
 效果如图：
 <p align="center">
-<img src="https://i.postimg.cc/RCfFKTQ3/dial.gif">
+<img src="https://s1.imagehub.cc/images/2022/06/16/dial.gif">
 </p>
 
 ## 折线表（chart.c）
@@ -139,7 +139,7 @@ void tui_com_chart_test(void)
 ```
 效果如图：
 <p align="center">
-<img src="https://i.postimg.cc/x1gqqTGt/chart.gif">
+<img src="https://s1.imagehub.cc/images/2022/06/16/chart.gif">
 </p>
 
 ## 翻页动画（volti.c）
@@ -192,7 +192,7 @@ void tui_com_volti_test(void)
 ```
 效果如图：
 <p align="center">
-<img src="https://i.postimg.cc/mkc7y1jL/volti.gif">
+<img src="https://s1.imagehub.cc/images/2022/06/16/volti.gif">
 </p>
 
 ## 消息框（msgbox.c）
@@ -221,7 +221,7 @@ void tui_com_msgbox_test(void)
 ```
 实际效果如图：
 <p align="center">
-<img src="https://i.postimg.cc/cCJFyJc2/msgbox.png">
+<img src="https://s1.imagehub.cc/images/2022/06/16/msgbox.png">
 </p>
 
 ## 创建组件模板（template.c）

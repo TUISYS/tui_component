@@ -456,6 +456,9 @@ void tui_com_calendar_show_year_month(tui_obj_t *com_calendar, int year, int mon
 
 	attri_me = (tui_com_calendar_attri_t *)tui_com_get_com_attri(com_calendar);
 
+	if (year < 1900 || year > 2100)
+		return;
+
 	sprintf(temp_str, "%d-%02d-%02d", year, month, day);
 	tui_label_set_txt(attri_me->yl_year_text_obj, temp_str);
 	tui_com_calendar_get_lunar_calendar(year, month, day, &is_jieri, temp_str);

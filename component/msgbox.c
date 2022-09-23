@@ -121,7 +121,7 @@ tui_obj_t * tui_com_msgbox_create(tui_obj_t * par)
 {
 	tui_obj_t *ret;
 	tui_com_msgbox_attri_t *attri_com;
-	tui_container_attri_t attri_root = { 0 };//×¢ÒâÏÈÇå¿Õ½á¹¹Ìå£¬±ÜÃâËæ»úÖµ
+	tui_container_attri_t attri_root = { 0 };//æ³¨æ„å…ˆæ¸…ç©ºç»“æ„ä½“ï¼Œé¿å…éšæœºå€¼
 
 	attri_com = malloc(sizeof(tui_com_msgbox_attri_t));
 	if (attri_com == NULL) {
@@ -152,9 +152,10 @@ tui_obj_t * tui_com_msgbox_create(tui_obj_t * par)
 int tui_com_msgbox_set_attri(tui_obj_t *com_msgbox, tui_com_msgbox_attri_t *attri)
 {
 	tui_com_msgbox_attri_t *attri_me;
-	tui_container_attri_t attri_cont = { 0 };//×¢ÒâÏÈÇå¿Õ½á¹¹Ìå£¬±ÜÃâËæ»úÖµ
-	tui_label_attri_t attri_txt = { 0 };//×¢ÒâÏÈÇå¿Õ½á¹¹Ìå£¬±ÜÃâËæ»úÖµ
-	tui_button_attri_t attri_btn = { 0 };//×¢ÒâÏÈÇå¿Õ½á¹¹Ìå£¬±ÜÃâËæ»úÖµ
+	tui_container_attri_t attri_cont = { 0 };//æ³¨æ„å…ˆæ¸…ç©ºç»“æ„ä½“ï¼Œé¿å…éšæœºå€¼
+	tui_label_attri_t attri_txt = { 0 };//æ³¨æ„å…ˆæ¸…ç©ºç»“æ„ä½“ï¼Œé¿å…éšæœºå€¼
+	tui_button_attri_t attri_btn = { 0 };//æ³¨æ„å…ˆæ¸…ç©ºç»“æ„ä½“ï¼Œé¿å…éšæœºå€¼
+	tui_obj_t *par;
 
 	if (com_msgbox == NULL) {
 		printf("tui_com_msgbox_set_attri L%d: faile\n", __LINE__);
@@ -163,7 +164,9 @@ int tui_com_msgbox_set_attri(tui_obj_t *com_msgbox, tui_com_msgbox_attri_t *attr
 
 	attri_me = (tui_com_msgbox_attri_t *)tui_com_get_com_attri(com_msgbox);
 
+	par = attri_me->par;
 	memcpy(attri_me, attri, sizeof(tui_com_msgbox_attri_t));
+	attri_me->par = par;
 
 	attri_me->top_cont = tui_container_create(com_msgbox);
 	if (attri_me->top_cont == NULL) {
@@ -336,7 +339,7 @@ void tui_com_msgbox_show_or_hide(tui_obj_t *com_msgbox, bool show_able)
 tui_obj_t * tui_com_msgbox_create_json(tui_obj_t * par, tJSON* attri_json, tui_map_cb_t map_cb[])
 {
 	tui_obj_t *ret;
-	tui_com_msgbox_attri_t attri = { 0 };//×¢ÒâÏÈÇå¿Õ½á¹¹Ìå£¬±ÜÃâËæ»úÖµ
+	tui_com_msgbox_attri_t attri = { 0 };//æ³¨æ„å…ˆæ¸…ç©ºç»“æ„ä½“ï¼Œé¿å…éšæœºå€¼
 	tJSON *item, *array;
 	int32_t num, i;
 
